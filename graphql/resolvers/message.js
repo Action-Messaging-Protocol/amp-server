@@ -53,8 +53,9 @@ module.exports = {
       await redis.push(getMessageStr(item.channel_id), JSON.stringify(item))
 
       // sets up all needed push data
-      const title = channelData && channelData.name || 'Chat Group'
-      const message = item.payload && item.payload.body ? item.payload.body : 'New message!'
+      const msgRaw = typeof item.payload === 'string' && item.payload.length > 0 ? JSON.parse(item.payload) : null
+      const message = channelData && channelData.name || 'Chat Group'
+      const title = msgRaw && msgRaw.body ? msgRaw.body : 'New message!'
       const push_ids = push_devices.length > 0 ? push_devices : []
 
       // Send socket notifs
