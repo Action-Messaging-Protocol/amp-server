@@ -1,4 +1,3 @@
-// https://hooks.slack.com/services/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
 const axios = require('axios')
 
 class Slack {
@@ -7,7 +6,7 @@ class Slack {
   }
 
   getHookUrl(options) {
-    const id = options.hookId || 'TGA6ME1SA/BG892PE7K/H6w79fmkePWA46oy7M3nVZ0j'
+    const id = options.hookId || 'TMNCQPUH2/BMNU1QX1T/J7vJD5yc4dFfCyvR3PY0Uxa4'
     return `https://hooks.slack.com/services/${id}`
   }
 
@@ -15,11 +14,9 @@ class Slack {
     const url = this.getHookUrl(payload)
     const data = {
       channel: '#general',
-      username: 'DAPPUSH',
-      text: 'Alert! You need to do something for this dapp! <https://gotchi.app|Click here>',
-      // icon_emoji: ':warning:',
-      // icon_emoji: ':dappush:'
-      icon_url: 'https://emoji.slack-edge.com/TGA6ME1SA/dappush/4d87b4f4174510b3.png'
+      username: 'Alice',
+      text: 'Take action on Alice! Click this link to get started <alice://|Click here>',
+      icon_emoji: ':tophat:',
     }
 
     axios.post(url, JSON.stringify(data)).then(res => {

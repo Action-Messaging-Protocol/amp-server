@@ -3,12 +3,9 @@
   "version": "0.0.1",
   "description": "Push, messages formatted to support actions, syncing &amp; listening to chain updates",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
     "start": "node index",
-    "test": ""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "authors": [
     "@markspereira",
@@ -16,6 +13,7 @@
   ],
   "license": "Apache",
   "dependencies": {
+    "apollo-server-express": "^2.9.0",
     "args": "^5.0.0",
     "axios": "^0.18.0",
     "dotenv": "^6.1.0",

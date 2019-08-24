@@ -1,12 +1,28 @@
-const server = require('./server')
-const routes = require('./routes')
-const args = require('args')
+require('dotenv').config()
+const express = require('express')
+, path = require('path')
+, { ApolloServer, gql } = require('apollo-server-express')
+, { typeDefs } = require('./graphql/schema')
+, { resolvers } = require('./graphql/resolvers')
 
-args.option('port', 'The port on which the app will be running')
+// REDIS: Every node needs it to sync the queue
+const sys = require('util')
+const exec = require('child_process').exec
 
-const flags = args.parse(process.argv)
-const activePort = flags.port || parseInt(process.env.PORT, 10) || 1337
+function puts(error, stdout, stderr) {
+  if (error) console.log('redis error', error)
+  sys.puts(stdout)
+}
 
-const s = new server()
+// start redis immediately, because we always need it, and dont like boot errors
+exec('redis-cli shutdown')
+exec('redis-server', puts)
 
-s.router(routes).listen(activePort)
+const server = new ApolloServer({ typeDefs, resolvers });
+const app = express()
+
+server.applyMiddleware({ app })
+
+app.listen({ port: 4000 }, () => {
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+})
