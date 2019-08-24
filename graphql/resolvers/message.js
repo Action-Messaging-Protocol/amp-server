@@ -1,6 +1,7 @@
-const { PubSub } = require('apollo-server')
+const { PubSub } = require('apollo-server-express')
 const uuid = require('uuid/v1')
 const redis = require('../../modules/redis')
+const events = require('../../modules/events')
 const push = require('../../modules/push')
 const pubsub = new PubSub()
 
