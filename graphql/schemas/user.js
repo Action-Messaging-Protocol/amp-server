@@ -25,6 +25,7 @@ module.exports = {
     "add new User"
     addUser(
       address: String!
+      device_ids: String
     ): User
 
     "add new User"
