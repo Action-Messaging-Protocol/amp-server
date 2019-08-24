@@ -5,7 +5,11 @@ module.exports = {
       "address of User"
       address: String
 
+      "Chats a user is a part of"
       channels: [Channel]
+
+      "Devices that will receive notifications, this is stringified array"
+      device_ids: String
     }
   `,
 
@@ -26,6 +30,7 @@ module.exports = {
     "add new User"
     updateUser(
       address: String!
+      device_ids: String
     ): User
 
     "Add new user to Channel"

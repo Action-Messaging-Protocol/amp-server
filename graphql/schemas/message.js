@@ -8,7 +8,7 @@ module.exports = {
       "Stringified for extreme diversity, but must require a 'body' inside object"
       payload: String
 
-      "TODO: User"
+      "User that send the message"
       user: User
       user_address: String
 
