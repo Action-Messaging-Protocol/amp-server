@@ -19,9 +19,10 @@ const typeDefs = gql`
     ${message.Mutation}
     ${user.Mutation}
   }
+
+  type Subscription {
+    ${channel.Subscription}
+  }
 `
 
 module.exports = { typeDefs }
-
-// type Subscription {
-// }

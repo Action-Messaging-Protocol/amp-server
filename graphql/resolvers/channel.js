@@ -1,5 +1,8 @@
+const { PubSub } = require('apollo-server-express')
 const uuid = require('uuid/v1')
 const redis = require('../../modules/redis')
+const events = require('../../modules/events')
+const pubsub = new PubSub()
 
 const getChannelStr = id => `CHANNEL_${id}`
 
@@ -39,6 +42,12 @@ module.exports = {
 
       await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
       return channelData
+    },
+  },
+
+  Subscription: {
+    messageAdded: {
+      subscribe: () => pubsub.asyncIterator([events.messageAdded]),
     },
   }
 }
