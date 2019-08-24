@@ -4,6 +4,8 @@ module.exports = {
     type User {
       "address of User"
       address: String
+
+      channels: [Channel]
     }
   `,
 
@@ -20,6 +22,12 @@ module.exports = {
 
     "add new User"
     updateUser(
+      address: String!
+    ): User
+
+    "Add new user to Channel"
+    addChannelToUser(
+      channel_id: String!
       address: String!
     ): User
   `

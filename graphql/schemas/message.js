@@ -10,7 +10,7 @@ module.exports = {
 
       "TODO: User"
       user: User
-      user_id: String
+      user_address: String
 
       "Channel messages belong to"
       channel: Channel
@@ -39,7 +39,6 @@ module.exports = {
     "Add new Message"
     addMessage(
       channel_id: String!
-      timestamp: String!
       payload: String
       user_id: String
       app_id: String
