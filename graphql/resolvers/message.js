@@ -1,6 +1,8 @@
+const { PubSub } = require('apollo-server')
 const uuid = require('uuid/v1')
 const redis = require('../../modules/redis')
 const push = require('../../modules/push')
+const pubsub = new PubSub()
 
 const getMessageStr = id => `MESSAGES_${id}`
 
@@ -29,6 +31,11 @@ module.exports = {
       const title = 'Daonuts - Group'
       const message = item.payload && item.payload.body ? item.payload.body : 'New message!'
       const push_ids = ['c1b155d0-02ce-44c8-9274-7fbbe982c931']
+
+      // Send socket notifs
+      pubsub.publish(events.messageAdded, { messageAdded: item })
+
+      // Send device notifs
       await push.send({ title, message, push_ids })
 
       return item

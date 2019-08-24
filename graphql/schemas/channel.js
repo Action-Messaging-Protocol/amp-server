@@ -29,5 +29,10 @@ module.exports = {
       channel_id: String!
       user_address: String!
     ): Channel
+  `,
+
+  Subscription: `
+    "Fires new message to channel"
+    messageAdded: Message
   `
 }

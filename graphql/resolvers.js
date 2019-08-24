@@ -15,9 +15,9 @@ const resolvers = {
     ...(user.Mutation ? user.Mutation : null),
   },
 
-  // Subscription: {
-  //   ...(channel.Subscription ? channel.Subscription : null),
-  // },
+  Subscription: {
+    ...(channel.Subscription ? channel.Subscription : null),
+  },
 }
 
 module.exports = { resolvers }
