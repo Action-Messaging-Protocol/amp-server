@@ -6,16 +6,14 @@ class Messages {
     return this
   }
 
-  async getAllById(req, res) {
-    const { key } = req.query
+  async getAllById(channelId) {
     const data = await redis.get(key)
-    res.json(data)
+    return data
   }
 
-  async getById(req, res) {
-    const { key } = req.query
+  async getById(channelId, key) {
     const data = await redis.get(key)
-    res.json(data)
+    return data
   }
 
   async addMessage(key, value) {

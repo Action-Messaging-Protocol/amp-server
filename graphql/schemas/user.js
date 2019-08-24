@@ -4,23 +4,31 @@ module.exports = {
     type User {
       "address of User"
       address: String
+
+      channels: [Channel]
     }
   `,
 
   Query: `
     "Get single User"
-    user(id: String!): User
+    user(address: String!): User
   `,
 
   Mutation: `
     "add new User"
     addUser(
-      id: String!
+      address: String!
     ): User
 
     "add new User"
     updateUser(
-      id: String!
+      address: String!
+    ): User
+
+    "Add new user to Channel"
+    addChannelToUser(
+      channel_id: String!
+      address: String!
     ): User
   `
 }

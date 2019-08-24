@@ -1,24 +1,29 @@
-const Messages = require('../../modules/messages')
+const uuid = require('uuid/v1')
+const redis = require('../../modules/redis')
+
+const getMessageStr = id => `MESSAGES_${id}`
 
 module.exports = {
   Query: {
-    messages() {
-      return Messages.getAllById()
+    async messages(parent, args) {
+      const data = await redis.getAll(getMessageStr(args.channel_id))
+      return data.map(m => JSON.parse(m))
     },
 
     async message(parent, args) {
-      // NOTE: Probably need channel id here
-      return Messages.getById(args.id)
+      const data = await redis.get(getMessageStr(args.channel_id), args.id)
+      return data
     },
   },
 
   Mutation: {
     addMessage: async (root, data, context) => {
       const item = { ...data }
-      delete item.id
+      item.id = uuid()
+      item.timestamp = `${+new Date()}`
 
-      const updateRes = await Messages.addMessage('channel_1234', item)
-      return updateRes
+      await redis.push(getMessageStr(item.channel_id), JSON.stringify(item))
+      return item
     },
   },
 }

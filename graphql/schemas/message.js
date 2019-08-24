@@ -10,9 +10,11 @@ module.exports = {
 
       "TODO: User"
       user: User
+      user_address: String
 
-      "TODO: Channel"
+      "Channel messages belong to"
       channel: Channel
+      channel_id: String
 
       "ISO8601 Timestamp in UTC"
       timestamp: String
@@ -20,23 +22,27 @@ module.exports = {
       "APP ID of the rich media message, OPTIONAL"
       app_id: String
 
-      "APP ID of the rich media message, OPTIONAL"
+      "APP name, OPTIONAL"
       app_name: String
     }
   `,
 
   Query: `
-    "Get all Messages of ALL Chats, yeah scary..."
-    messages: [Message]
+    "Get all Messages of a channel"
+    messages(channel_id: String!): [Message]
 
     "Get single message"
-    message(id: String!): Message
+    message(channel_id: String!, id: String!): Message
   `,
 
   Mutation: `
-    "add new Message"
+    "Add new Message"
     addMessage(
-      id: String!
+      channel_id: String!
+      payload: String
+      user_id: String
+      app_id: String
+      app_name: String
     ): Message
   `
 }

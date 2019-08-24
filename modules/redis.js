@@ -56,6 +56,22 @@ class RedisProvider {
     })
   }
 
+  getAll(key) {
+    if (!this.client) return Promise.resolve(null)
+    return new Promise((resolve, reject) => {
+      this.client.lrange(key, 0, -1, (err, reply) => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        // reply is null when the key is missing
+        // console.log('GET redis:', reply)
+        resolve(reply)
+      })
+    })
+  }
+
   // NOTE: TBD if I hash the data?
   push(key, value) {
     if (!this.client) return Promise.resolve(null)
