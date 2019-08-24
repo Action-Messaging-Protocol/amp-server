@@ -28,7 +28,7 @@ module.exports = {
   `,
 
   Query: `
-    "Get all Messages of ALL Chats, yeah scary..."
+    "Get all Messages of a channel"
     messages(channel_id: String!): [Message]
 
     "Get single message"

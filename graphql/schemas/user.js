@@ -9,18 +9,18 @@ module.exports = {
 
   Query: `
     "Get single User"
-    user(id: String!): User
+    user(address: String!): User
   `,
 
   Mutation: `
     "add new User"
     addUser(
-      id: String!
+      address: String!
     ): User
 
     "add new User"
     updateUser(
-      id: String!
+      address: String!
     ): User
   `
 }

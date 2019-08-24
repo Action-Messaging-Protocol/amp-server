@@ -1,35 +1,44 @@
-// const SerialProvider = require('../../modules/messages')
+const uuid = require('uuid/v1')
+const redis = require('../../modules/redis')
+
+const getChannelStr = id => `CHANNEL_${id}`
 
 module.exports = {
   Query: {
     async channel(parent, args, context, info) {
-      // const res = await db.getItemById('Makers', args.id)
-      // const motors = await Promise.all(res.motors.map(
-      //   async id => await db.getItemById('Motors', id)
-      // ))
-      //
-      // return {
-      //   ...res,
-      //   motors,
-      // }
+      const data = await redis.get(getChannelStr(args.channel_id))
+      console.log('channel', data)
+      return JSON.parse(data)
     },
   },
 
   Mutation: {
-    addChannel: async (root, data, context) => {
-      // const item = { ...data }
-      // delete item.id
-      //
-      // const updateRes = await db.updateItemById('Makers', data.id, item)
-      // return updateRes
+    newChannel: async (root, data, context) => {
+      const item = { ...data }
+      item.channel_id = uuid()
+      console.log('item', item)
+
+      await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
+      return item
     },
 
     updateChannel: async (root, data, context) => {
-      // const item = { ...data }
-      // delete item.id
-      //
-      // const updateRes = await db.updateItemById('Makers', data.id, item)
-      // return updateRes
+      const item = { ...data }
+
+      await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
+      return item
+    },
+
+    addUserToChannel: async (root, data, context) => {
+      const item = { ...data }
+      const res = await redis.get(getChannelStr(item.channel_id))
+      const channelData = JSON.parse(res)
+      channelData.users = channelData.users || []
+      channelData.users.push({ address: item.user_address })
+      console.log('channelData', channelData)
+
+      await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
+      return channelData
     },
   }
 }

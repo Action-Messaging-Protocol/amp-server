@@ -3,30 +3,31 @@ module.exports = {
     "Generic Channel"
     type Channel {
       "UUID of channel, based on the dao contract address"
-      address: String
+      channel_id: String
       name: String
     }
   `,
 
   Query: `
     "Get single channel"
-    channel(id: String!): Channel
+    channel(channel_id: String!): Channel
   `,
 
   Mutation: `
     "add new Channel"
-    addChannel(
-      id: String!
+    newChannel(
+      name: String
     ): Channel
 
-    "add new Channel"
+    "update a Channel"
     updateChannel(
-      id: String!
+      channel_id: String!
     ): Channel
 
-    "delete Channel"
-    deleteChannel(
-      id: String!
+    "Add new user to Channel"
+    addUserToChannel(
+      channel_id: String!
+      user_address: String!
     ): Channel
   `
 }
