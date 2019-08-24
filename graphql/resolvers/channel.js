@@ -10,7 +10,6 @@ module.exports = {
   Query: {
     async channel(parent, args, context, info) {
       const data = await redis.get(getChannelStr(args.channel_id))
-      console.log('channel', data)
       return JSON.parse(data)
     },
   },
@@ -19,7 +18,6 @@ module.exports = {
     newChannel: async (root, data, context) => {
       const item = { ...data }
       item.channel_id = uuid()
-      console.log('item', item)
 
       await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
       return item
@@ -38,9 +36,8 @@ module.exports = {
       const channelData = JSON.parse(res)
       channelData.users = channelData.users || []
       channelData.users.push({ address: item.user_address })
-      console.log('channelData', channelData)
 
-      await redis.set(getChannelStr(item.channel_id), JSON.stringify(item))
+      await redis.set(getChannelStr(item.channel_id), JSON.stringify(channelData))
       return channelData
     },
   },

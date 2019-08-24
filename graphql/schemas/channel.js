@@ -5,6 +5,9 @@ module.exports = {
       "UUID of channel, based on the dao contract address"
       channel_id: String
       name: String
+
+      "User part of this channel"
+      users: [User]
     }
   `,
 
