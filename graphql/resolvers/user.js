@@ -2,6 +2,7 @@ const uuid = require('uuid/v1')
 const redis = require('../../modules/redis')
 
 const getUserStr = id => `USERS_${id}`
+const getChannelStr = id => `CHANNEL_${id}`
 
 module.exports = {
   Query: {
@@ -9,6 +10,16 @@ module.exports = {
       const data = await redis.get(getUserStr(args.address))
       console.log('user', data)
       return JSON.parse(data)
+    },
+    async channels(parent, args, context, info) {
+      const _user = await redis.get(getUserStr(args.address))
+      const user = JSON.parse(_user)
+      const channels = user && user.channels || []
+
+      // TODO: Loop all channels and get channel meta data
+
+      console.log('user channels', channels)
+      return channels
     },
   },
 
@@ -37,7 +48,7 @@ module.exports = {
       userData.channels.push({ channel_id: item.channel_id })
       console.log('userData', userData)
 
-      await redis.set(userRef, JSON.stringify(item))
+      await redis.set(userRef, JSON.stringify(userData))
       return userData
     },
   }

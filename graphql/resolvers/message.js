@@ -1,5 +1,6 @@
 const uuid = require('uuid/v1')
 const redis = require('../../modules/redis')
+const push = require('../../modules/push')
 
 const getMessageStr = id => `MESSAGES_${id}`
 
@@ -23,6 +24,13 @@ module.exports = {
       item.timestamp = `${+new Date()}`
 
       await redis.push(getMessageStr(item.channel_id), JSON.stringify(item))
+
+      // TODO: Make these dynamic for reals
+      const title = 'Daonuts - Group'
+      const message = item.payload && item.payload.body ? item.payload.body : 'New message!'
+      const push_ids = ['c1b155d0-02ce-44c8-9274-7fbbe982c931']
+      await push.send({ title, message, push_ids })
+
       return item
     },
   },

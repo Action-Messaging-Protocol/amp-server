@@ -12,6 +12,9 @@ module.exports = {
   Query: `
     "Get single User"
     user(address: String!): User
+
+    "Get channels user is a part of"
+    channels(address: String!): [Channel]
   `,
 
   Mutation: `
