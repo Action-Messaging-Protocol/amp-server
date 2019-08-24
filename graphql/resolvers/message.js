@@ -34,13 +34,19 @@ module.exports = {
       const channelData = JSON.parse(channelRaw)
 
       if (channelData && channelData.users) {
-        channelData.users.forEach(async u => {
-          // loop users, get their data, get their device ID, then add to push
-          // NOTE: Need to exclude sender
-          const userRaw = await redis.get(getUserStr(u.address))
-          const userData = JSON.parse(userRaw)
-          const dids = userData && userData.device_ids ? JSON.parse(userData.device_ids) : null
-          if (dids) push_devices = push_devices.concat()
+        await channelData.users.forEach(async u => {
+          if (u && u.address) {
+            // loop users, get their data, get their device ID, then add to push
+            // NOTE: Excludes sender
+            // NOTE: this is ugly... argh
+            const userRaw = await redis.get(getUserStr(u.address))
+            const userData = userRaw ? JSON.parse(userRaw) : null
+            if (userData && userData.address && userData.device_ids && userData.address !== item.user_address) {
+              const didRaw = userData && userData.device_ids ? userData.device_ids : null
+              const dids = didRaw && didRaw !== 'null' ? JSON.parse(didRaw) : null
+              if (dids) push_devices = push_devices.concat(dids)
+            }
+          }
         })
       }
 
@@ -49,14 +55,13 @@ module.exports = {
       // sets up all needed push data
       const title = channelData && channelData.name || 'Chat Group'
       const message = item.payload && item.payload.body ? item.payload.body : 'New message!'
-      const push_ids = push_devices.length > 0 ? push_devices : ['c1b155d0-02ce-44c8-9274-7fbbe982c931']
-      console.log('push_ids', push_ids)
+      const push_ids = push_devices.length > 0 ? push_devices : []
 
       // Send socket notifs
       pubsub.publish(events.messageAdded, { messageAdded: item })
 
       // Send device notifs
-      await push.send({ title, message, push_ids })
+      if (push_ids.length > 0) await push.send({ title, message, push_ids })
 
       return item
     },
