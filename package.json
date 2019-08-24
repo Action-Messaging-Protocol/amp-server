@@ -1,0 +1,33 @@
+{
+  "name": "amp-server",
+  "version": "0.0.1",
+  "description": "Push, messages formatted to support actions, syncing &amp; listening to chain updates",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "authors": [
+    "@markspereira",
+    "@trevorjtclarke"
+  ],
+  "license": "Apache",
+  "dependencies": {
+    "apollo-server-express": "^2.9.0",
+    "args": "^5.0.0",
+    "axios": "^0.18.0",
+    "dotenv": "^6.1.0",
+    "peer": "^0.2.10",
+    "redis": "^2.8.0",
+    "socket.io-client": "^2.2.0",
+    "twilio": "^3.28.0",
+    "web3": "^1.0.0-beta.36"
+  },
+  "devDependencies": {
+    "express": "^4.14.1"
+  },
+  "engines": {
+    "node": ">= 8.11.3",
+    "npm": ">= 5.6.0"
+  }
+}
