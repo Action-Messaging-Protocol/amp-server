@@ -40,7 +40,7 @@ module.exports = {
     addMessage(
       channel_id: String!
       payload: String
-      user_id: String
+      user_address: String
       app_id: String
       app_name: String
     ): Message

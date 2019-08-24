@@ -6,6 +6,8 @@ const push = require('../../modules/push')
 const pubsub = new PubSub()
 
 const getMessageStr = id => `MESSAGES_${id}`
+const getChannelStr = id => `CHANNEL_${id}`
+const getUserStr = id => `USERS_${id}`
 
 module.exports = {
   Query: {
@@ -22,22 +24,44 @@ module.exports = {
 
   Mutation: {
     addMessage: async (root, data, context) => {
+      let push_devices = []
       const item = { ...data }
       item.id = uuid()
       item.timestamp = `${+new Date()}`
 
+      // Get deets for relevant infos
+      const channelRaw = await redis.get(getChannelStr(item.channel_id))
+      const channelData = JSON.parse(channelRaw)
+
+      if (channelData && channelData.users) {
+        await channelData.users.forEach(async u => {
+          if (u && u.address) {
+            // loop users, get their data, get their device ID, then add to push
+            // NOTE: Excludes sender
+            // NOTE: this is ugly... argh
+            const userRaw = await redis.get(getUserStr(u.address))
+            const userData = userRaw ? JSON.parse(userRaw) : null
+            if (userData && userData.address && userData.device_ids && userData.address !== item.user_address) {
+              const didRaw = userData && userData.device_ids ? userData.device_ids : null
+              const dids = didRaw && didRaw !== 'null' ? JSON.parse(didRaw) : null
+              if (dids) push_devices = push_devices.concat(dids)
+            }
+          }
+        })
+      }
+
       await redis.push(getMessageStr(item.channel_id), JSON.stringify(item))
 
-      // TODO: Make these dynamic for reals
-      const title = 'Daonuts - Group'
+      // sets up all needed push data
+      const title = channelData && channelData.name || 'Chat Group'
       const message = item.payload && item.payload.body ? item.payload.body : 'New message!'
-      const push_ids = ['c1b155d0-02ce-44c8-9274-7fbbe982c931']
+      const push_ids = push_devices.length > 0 ? push_devices : []
 
       // Send socket notifs
       pubsub.publish(events.messageAdded, { messageAdded: item })
 
       // Send device notifs
-      await push.send({ title, message, push_ids })
+      if (push_ids.length > 0) await push.send({ title, message, push_ids })
 
       return item
     },
