@@ -16,7 +16,7 @@
     "@daostack/client": "^0.2.6",
     "apollo-server-express": "^2.9.0",
     "args": "^5.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "dotenv": "^6.1.0",
     "redis": "^2.8.0",
     "uuid": "^3.3.3"
