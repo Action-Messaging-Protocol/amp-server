@@ -22,7 +22,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "express": "^4.14.1"
+    "express": "^4.17.3"
   },
   "engines": {
     "node": ">= 8.11.3",
